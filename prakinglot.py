@@ -14,28 +14,53 @@ def print_parking_lot():
         for spot in row:
             print(spot, end=" ")
         print()
-def payment(rowid,columnid,parkingid):
+def parse_time(time_str):
+    hours, minutes = map(int, time_str.split(':'))
+    return hours, minutes
 
-  exit_time=float(input("enter the exit time : "))
-  entry_time=entry_timelist.get(parkingid)
-  total_Time=exit_time-entry_time
-  stay_timelist[parkingid]=total_Time
-  userstay=stay_timelist.get(parkingid)
-  print(userstay)
+def payment(rowid, columnid, parkingid):
+    global cost
+    amount=0
+    exit_time_str = input("Enter the exit time (HH:MM): ")
+    exit_hours, exit_minutes = parse_time(exit_time_str)
 
-  
+    entry_time_str = entry_timelist.get(parkingid)
+    entry_hours, entry_minutes = parse_time(entry_time_str)
 
-  amount = 20  
-  print("You need to pay $", amount)
-  while True:
-            payment = int(input("Enter the payment amount: "))
-            if payment >= amount:
-                parking_lot[rowid][columnid] = 0
-                cost += amount
-                print("Thank you for payment. Car can leave now.")
-                break
-            else:
-                print("Insufficient payment. Please pay the correct amount.")
+    exit_total_minutes = exit_hours * 60 + exit_minutes
+    entry_total_minutes = entry_hours * 60 + entry_minutes
+
+    total_minutes = exit_total_minutes - entry_total_minutes
+   
+    stay_timelist[parkingid] = total_minutes
+    print("Total stay time:", total_minutes, "min")
+
+    if total_minutes <= 15:
+        amount =0
+    
+    
+    total_hours = (total_minutes + 29) / 60
+    print(total_hours)
+
+    if total_hours == 1:
+         amount = 100
+    elif total_hours <= 2:
+        amount =100 + 150
+    else:
+        fee = 100 + 150
+        remaining_hours = total_hours - 2
+        fee += remaining_hours * 150
+        amount =fee
+    print("You need to pay $", amount)
+    while True:
+                payment = int(input("Enter the payment amount: "))
+                if payment >= amount:
+                    parking_lot[rowid][columnid] = 0
+                    cost += amount
+                    print("Thank you for payment. Car can leave now.")
+                    break
+                else:
+                    print("Insufficient payment. Please pay the correct amount.")
 
 
 def enter_parking():
@@ -46,7 +71,7 @@ def enter_parking():
                 parking_lot[i][j] = 1
                 id_str = str(chr(65 + i) + str(1 + j))
                 parkedid.append(id_str)
-                entry_time=float(input("enter the time in float value example 1.15 "))
+                entry_time=input("Enter the entry time (HH:MM): ")
                 entry_timelist[id_str]=entry_time
                 print("Car parked successfully with ID:", id_str)
                 return
