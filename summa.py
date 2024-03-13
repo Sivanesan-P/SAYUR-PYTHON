@@ -12,6 +12,7 @@ def payment():
     total_minutes = (exit_hours - entry_hours) * 60 + (exit_minutes - entry_minutes)
     total_hrs = total_minutes // 60
     extra_min = total_minutes % 60
+    print(f"total time you spend : {total_hrs}:{extra_min}")
 
     if extra_min > 30:
         extra_amt = 100
