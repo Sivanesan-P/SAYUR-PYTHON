@@ -14,10 +14,10 @@ def payment():
     extra_min = total_minutes % 60
     print(f"total time you spend : {total_hrs}:{extra_min}")
 
-    if extra_min > 30:
-        extra_amt = 100
-    else:
+    if extra_min <= 35 and extra_min>=25:
         extra_amt = 50
+    elif extra_min>35:
+        extra_amt = 100
 
     if total_hrs == 0:
         if extra_min <= 15:
